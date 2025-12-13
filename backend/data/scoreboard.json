@@ -1,0 +1,111 @@
+[
+  {
+    "id": 1,
+    "type": "individual",
+    "rank": 1,
+    "name": "Jane Doe",
+    "college": "St. Teresa's",
+    "program": "Classical Dance",
+    "score": 95,
+    "grade": "A",
+    "medal": "🥇",
+    "category": "onstage"
+  },
+  {
+    "id": 2,
+    "type": "group",
+    "rank": 1,
+    "teamName": "Groove Breakers",
+    "college": "Maharajas",
+    "program": "Hip Hop",
+    "members": "John, Mike, Sarah, Lisa",
+    "score": 98,
+    "grade": "A",
+    "medal": "🥇",
+    "category": "onstage"
+  },
+  {
+    "id": 3,
+    "type": "individual",
+    "rank": 2,
+    "name": "Arun Kumar",
+    "college": "Sacred Heart",
+    "program": "Classical Dance",
+    "score": 92,
+    "grade": "A",
+    "medal": "🥈",
+    "category": "onstage"
+  },
+  {
+    "id": 4,
+    "type": "individual",
+    "rank": 3,
+    "name": "Sarah Lee",
+    "college": "Rajagiri",
+    "program": "Classical Dance",
+    "score": 88,
+    "grade": "A",
+    "medal": "🥉",
+    "category": "onstage"
+  },
+  {
+    "id": 5,
+    "type": "group",
+    "rank": 2,
+    "teamName": "Rhythm Squad",
+    "college": "St. Alberts",
+    "program": "Hip Hop",
+    "members": "Alex, Ben, Charlie",
+    "score": 90,
+    "grade": "A",
+    "medal": "🥈",
+    "category": "onstage"
+  },
+  {
+    "id": 6,
+    "type": "individual",
+    "rank": 1,
+    "name": "Meera Joy",
+    "college": "St. Teresa's",
+    "program": "Poetry Writing",
+    "score": 94,
+    "grade": "A",
+    "medal": "🥇",
+    "category": "offstage"
+  },
+  {
+    "id": 7,
+    "type": "individual",
+    "rank": 2,
+    "name": "Rahul V",
+    "college": "Maharajas",
+    "program": "Poetry Writing",
+    "score": 89,
+    "grade": "A",
+    "medal": "🥈",
+    "category": "offstage"
+  },
+  {
+    "id": 1765568443240,
+    "type": "individual",
+    "rank": 1,
+    "name": "Test User",
+    "college": "Test College",
+    "program": "Test Program",
+    "score": 100,
+    "grade": "A",
+    "category": "onstage"
+  },
+  {
+    "id": 1765568639990,
+    "type": "individual",
+    "category": "onstage",
+    "program": "song",
+    "rank": "1",
+    "score": "1",
+    "college": "duxford",
+    "medal": "🥉",
+    "grade": "B",
+    "name": "PPH"
+  }
+]
