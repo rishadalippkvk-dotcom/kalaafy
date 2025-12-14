@@ -129,30 +129,30 @@ export const programs = {
 
 // Individual Scores
 export const individualScores = [
-    { rank: 1, name: 'Priya Sharma', college: 'St. Xavier\'s College', program: 'Solo Singing', category: 'onstage', score: 98, medal: '🥇' },
-    { rank: 2, name: 'Rahul Verma', college: 'Christ College', program: 'Stand-up Comedy', category: 'onstage', score: 96, medal: '🥈' },
-    { rank: 3, name: 'Ananya Iyer', college: 'Loyola College', program: 'Classical Dance', category: 'onstage', score: 95, medal: '🥉' },
-    { rank: 4, name: 'Arjun Menon', college: 'MCC', program: 'Quiz Competition', category: 'offstage', score: 94 },
-    { rank: 5, name: 'Sneha Reddy', college: 'Stella Maris', program: 'Essay Writing', category: 'offstage', score: 93 },
-    { rank: 6, name: 'Vikram Singh', college: 'St. Xavier\'s College', program: 'Photography', category: 'offstage', score: 92 },
-    { rank: 7, name: 'Divya Nair', college: 'Christ College', program: 'Classical Dance', category: 'onstage', score: 91 },
-    { rank: 8, name: 'Karthik Kumar', college: 'Loyola College', program: 'Solo Singing', category: 'onstage', score: 90 },
-    { rank: 9, name: 'Meera Patel', college: 'MCC', program: 'Debate', category: 'offstage', score: 89 },
-    { rank: 10, name: 'Rohan Das', college: 'Stella Maris', program: 'Stand-up Comedy', category: 'onstage', score: 88 }
+    { rank: 1, name: 'Priya Sharma', college: 'ASTRA', program: 'Solo Singing', category: 'onstage', score: 98, medal: '🥇' },
+    { rank: 2, name: 'Rahul Verma', college: 'LOKHA', program: 'Stand-up Comedy', category: 'onstage', score: 96, medal: '🥈' },
+    { rank: 3, name: 'Ananya Iyer', college: 'EAKHA', program: 'Classical Dance', category: 'onstage', score: 95, medal: '🥉' },
+    { rank: 4, name: 'Arjun Menon', college: 'ASTRA', program: 'Quiz Competition', category: 'offstage', score: 94 },
+    { rank: 5, name: 'Sneha Reddy', college: 'LOKHA', program: 'Essay Writing', category: 'offstage', score: 93 },
+    { rank: 6, name: 'Vikram Singh', college: 'ASTRA', program: 'Photography', category: 'offstage', score: 92 },
+    { rank: 7, name: 'Divya Nair', college: 'LOKHA', program: 'Classical Dance', category: 'onstage', score: 91 },
+    { rank: 8, name: 'Karthik Kumar', college: 'EAKHA', program: 'Solo Singing', category: 'onstage', score: 90 },
+    { rank: 9, name: 'Meera Patel', college: 'EAKHA', program: 'Debate', category: 'offstage', score: 89 },
+    { rank: 10, name: 'Rohan Das', college: 'ASTRA', program: 'Stand-up Comedy', category: 'onstage', score: 88 }
 ];
 
 // Group Scores
 export const groupScores = [
-    { rank: 1, teamName: 'Rhythm Riders', college: 'St. Xavier\'s College', program: 'Western Dance', category: 'onstage', score: 97, members: 8, medal: '🥇' },
-    { rank: 2, teamName: 'Drama Kings', college: 'Christ College', program: 'Drama', category: 'onstage', score: 96, members: 12, medal: '🥈' },
-    { rank: 3, teamName: 'Melody Makers', college: 'Loyola College', program: 'Group Singing', category: 'onstage', score: 95, members: 6, medal: '🥉' },
-    { rank: 4, teamName: 'Cine Squad', college: 'MCC', program: 'Short Film', category: 'offstage', score: 94, members: 5 },
-    { rank: 5, teamName: 'Debate Masters', college: 'Stella Maris', program: 'Debate', category: 'offstage', score: 92, members: 3 },
-    { rank: 6, teamName: 'Classical Ensemble', college: 'St. Xavier\'s College', program: 'Classical Dance', category: 'onstage', score: 91, members: 7 },
-    { rank: 7, teamName: 'Harmony Voices', college: 'Christ College', program: 'Group Singing', category: 'onstage', score: 90, members: 6 },
-    { rank: 8, teamName: 'Film Makers', college: 'Loyola College', program: 'Short Film', category: 'offstage', score: 89, members: 5 },
-    { rank: 9, teamName: 'Dance Fusion', college: 'MCC', program: 'Western Dance', category: 'onstage', score: 88, members: 8 },
-    { rank: 10, teamName: 'Stage Warriors', college: 'Stella Maris', program: 'Drama', category: 'onstage', score: 87, members: 10 }
+    { rank: 1, teamName: 'Rhythm Riders', college: 'ASTRA', program: 'Western Dance', category: 'onstage', score: 97, members: 8, medal: '🥇' },
+    { rank: 2, teamName: 'Drama Kings', college: 'LOKHA', program: 'Drama', category: 'onstage', score: 96, members: 12, medal: '🥈' },
+    { rank: 3, teamName: 'Melody Makers', college: 'EAKHA', program: 'Group Singing', category: 'onstage', score: 95, members: 6, medal: '🥉' },
+    { rank: 4, teamName: 'Cine Squad', college: 'ASTRA', program: 'Short Film', category: 'offstage', score: 94, members: 5 },
+    { rank: 5, teamName: 'Debate Masters', college: 'LOKHA', program: 'Debate', category: 'offstage', score: 92, members: 3 },
+    { rank: 6, teamName: 'Classical Ensemble', college: 'ASTRA', program: 'Classical Dance', category: 'onstage', score: 91, members: 7 },
+    { rank: 7, teamName: 'Harmony Voices', college: 'LOKHA', program: 'Group Singing', category: 'onstage', score: 90, members: 6 },
+    { rank: 8, teamName: 'Film Makers', college: 'EAKHA', program: 'Short Film', category: 'offstage', score: 89, members: 5 },
+    { rank: 9, teamName: 'Dance Fusion', college: 'EAKHA', program: 'Western Dance', category: 'onstage', score: 88, members: 8 },
+    { rank: 10, teamName: 'Stage Warriors', college: 'ASTRA', program: 'Drama', category: 'onstage', score: 87, members: 10 }
 ];
 
 // Notices

@@ -3,18 +3,34 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+
+// Configure Multer Storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const app = express();
 const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const DATA_DIR = path.join(__dirname, 'data');
 const PROGRAMS_FILE = path.join(DATA_DIR, 'programs.json');
 const NOTICES_FILE = path.join(DATA_DIR, 'notices.json');
 const ADMINS_FILE = path.join(DATA_DIR, 'admins.json');
 const SCOREBOARD_FILE = path.join(DATA_DIR, 'scoreboard.json');
+const GALLERY_FILE = path.join(DATA_DIR, 'gallery.json');
 
 // Helper to read data
 const readData = (file) => {
@@ -150,6 +166,66 @@ app.delete('/api/scoreboard/:id', (req, res) => {
     let scores = readData(SCOREBOARD_FILE);
     scores = scores.filter(s => s.id != id);
     writeData(SCOREBOARD_FILE, scores);
+    res.json({ success: true });
+});
+
+// --- Gallery CRUD ---
+
+// --- Gallery CRUD ---
+
+app.get('/api/gallery', (req, res) => {
+    const images = readData(GALLERY_FILE);
+    res.json(images);
+});
+
+app.post('/api/gallery', upload.single('image'), (req, res) => {
+    const images = readData(GALLERY_FILE);
+
+    let imageUrl = req.body.url;
+    if (req.file) {
+        imageUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+    }
+
+    const newImage = {
+        id: Date.now(),
+        ...req.body,
+        url: imageUrl
+    };
+
+    images.push(newImage);
+    writeData(GALLERY_FILE, images);
+    res.json(newImage);
+});
+
+app.put('/api/gallery/:id', upload.single('image'), (req, res) => {
+    const { id } = req.params;
+    let images = readData(GALLERY_FILE);
+    const index = images.findIndex(img => img.id == id);
+
+    if (index !== -1) {
+        let imageUrl = req.body.url || images[index].url;
+        if (req.file) {
+            imageUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+        }
+
+        images[index] = {
+            ...images[index],
+            ...req.body,
+            url: imageUrl
+        };
+
+        writeData(GALLERY_FILE, images);
+        res.json(images[index]);
+    } else {
+        res.status(404).json({ message: 'Image not found' });
+    }
+});
+
+app.delete('/api/gallery/:id', (req, res) => {
+    const { id } = req.params;
+    let images = readData(GALLERY_FILE);
+    images = images.filter(img => img.id != id);
+    writeData(GALLERY_FILE, images);
     res.json({ success: true });
 });
 

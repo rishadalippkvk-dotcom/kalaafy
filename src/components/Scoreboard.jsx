@@ -1,10 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { individualScores, groupScores } from '../data/mockData';
 import './Scoreboard.css';
 
 const Scoreboard = () => {
     const [scoreType, setScoreType] = useState('individual');
     const [filterCategory, setFilterCategory] = useState('all');
-    const [scores, setScores] = useState([]);
+    // Initialize with mock data as fallback/default
+    const [scores, setScores] = useState([
+        ...individualScores.map(s => ({ ...s, type: 'individual' })),
+        ...groupScores.map(s => ({ ...s, type: 'group' }))
+    ]);
+
+    // Calculate Group Standings (ASTRA, LOKHA, EAKHA)
+    const groupStandings = useMemo(() => {
+        const standings = { ASTRA: 0, LOKHA: 0, EAKHA: 0 };
+
+        scores.forEach(score => {
+            const rank = parseInt(score.rank);
+            let points = 0;
+
+            // Scoring Rules:
+            // Individual: 1st=5, 2nd=3, 3rd=1
+            // Group: 1st=10, 2nd=7, 3rd=4
+            if (score.type === 'individual') {
+                if (rank === 1) points = 5;
+                else if (rank === 2) points = 3;
+                else if (rank === 3) points = 1;
+            } else if (score.type === 'group') {
+                if (rank === 1) points = 10;
+                else if (rank === 2) points = 7;
+                else if (rank === 3) points = 4;
+            }
+
+            // Accumulate points if the college/group matches
+            if (points > 0 && standings[score.college] !== undefined) {
+                standings[score.college] += points;
+            }
+        });
+
+        return Object.entries(standings)
+            .map(([group, score]) => ({ group, score }))
+            .sort((a, b) => b.score - a.score);
+    }, [scores]);
 
     useEffect(() => {
         fetch('http://localhost:5000/api/scoreboard')
@@ -29,6 +66,38 @@ const Scoreboard = () => {
         <section id="scoreboard" className="section scoreboard-section">
             <div className="container">
                 <h2 className="section-title">Scoreboard</h2>
+
+                {/* Main Group Standings */}
+                <div className="group-standings-card" style={{
+                    background: 'var(--card-bg, #1a1a1a)',
+                    padding: '20px',
+                    borderRadius: '12px',
+                    marginBottom: '30px',
+                    border: '1px solid var(--border-color, #333)'
+                }}>
+                    <h3 style={{ textAlign: 'center', marginBottom: '20px', color: 'var(--primary-color, #ffd700)' }}>🏆 Championship Standings</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+                        {groupStandings.map((group, index) => (
+                            <div key={group.group} style={{
+                                textAlign: 'center',
+                                padding: '15px',
+                                minWidth: '150px',
+                                background: index === 0 ? 'rgba(255, 215, 0, 0.1)' : 'transparent',
+                                borderRadius: '8px',
+                                border: index === 0 ? '1px solid #ffd700' : '1px solid #444'
+                            }}>
+                                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>
+                                    {index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : ''}
+                                    {group.group}
+                                </div>
+                                <div style={{ fontSize: '2rem', fontWeight: '800', color: index === 0 ? '#ffd700' : '#fff' }}>
+                                    {group.score}
+                                </div>
+                                <div style={{ fontSize: '0.9rem', opacity: 0.7 }}>Points</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 <div className="scoreboard-controls">
                     <div className="tabs">

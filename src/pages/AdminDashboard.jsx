@@ -10,6 +10,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('programs');
     const [items, setItems] = useState([]);
     const [formData, setFormData] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
 
@@ -17,14 +18,6 @@ const AdminDashboard = () => {
     useEffect(() => {
         if (!user) navigate('/admin/login');
     }, [user, navigate]);
-
-    // Fetch data when tab changes
-    useEffect(() => {
-        fetchData();
-        setFormData({});
-        setIsEditing(false);
-        setEditId(null);
-    }, [activeTab]);
 
     const fetchData = async () => {
         try {
@@ -35,6 +28,15 @@ const AdminDashboard = () => {
             console.error("Error fetching data:", error);
         }
     };
+
+    // Fetch data and reset form state when tab changes
+    useEffect(() => {
+        fetchData();
+        setFormData({});
+        setSelectedFile(null);
+        setIsEditing(false);
+        setEditId(null);
+    }, [activeTab]);
 
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure?")) return;
@@ -62,17 +64,44 @@ const AdminDashboard = () => {
             : `http://localhost:5000/api/${activeTab}`;
 
         try {
-            const res = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-            if (res.ok) {
-                fetchData();
-                setFormData({});
-                setIsEditing(false);
-                setEditId(null);
-                alert(isEditing ? 'Updated successfully!' : 'Added successfully!');
+            if (activeTab === 'gallery') {
+                const formDataObj = new FormData();
+                // Append text fields
+                for (const key in formData) {
+                    formDataObj.append(key, formData[key]);
+                }
+                // Append file if selected
+                if (selectedFile) {
+                    formDataObj.append('image', selectedFile);
+                }
+
+                // Do not set Content-Type header manually for FormData
+                const res = await fetch(url, {
+                    method: method,
+                    body: formDataObj
+                });
+
+                if (res.ok) {
+                    fetchData();
+                    setFormData({});
+                    setSelectedFile(null);
+                    setIsEditing(false);
+                    setEditId(null);
+                    alert(isEditing ? 'Updated successfully!' : 'Added successfully!');
+                }
+            } else {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                if (res.ok) {
+                    fetchData();
+                    setFormData({});
+                    setIsEditing(false);
+                    setEditId(null);
+                    alert(isEditing ? 'Updated successfully!' : 'Added successfully!');
+                }
             }
         } catch (error) {
             console.error("Error submitting:", error);
@@ -82,6 +111,12 @@ const AdminDashboard = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
     };
 
     // --- Form Fields Generators ---
@@ -155,6 +190,24 @@ const AdminDashboard = () => {
         </>
     );
 
+    const renderGalleryInputs = () => (
+        <>
+            <div className="file-input-group">
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Upload Image (Optional if using URL)</label>
+                <input type="file" onChange={handleFileChange} accept="image/*" style={{ marginBottom: '10px' }} />
+            </div>
+            <input name="url" placeholder="Or enter Image URL" value={formData.url || ''} onChange={handleInputChange} />
+            <input name="title" placeholder="Image Title" value={formData.title || ''} onChange={handleInputChange} required />
+            <select name="category" value={formData.category || ''} onChange={handleInputChange} required>
+                <option value="">Select Category</option>
+                <option value="onstage">Onstage</option>
+                <option value="offstage">Offstage</option>
+            </select>
+            <input name="event" placeholder="Event Name" value={formData.event || ''} onChange={handleInputChange} required />
+            <textarea name="description" placeholder="Description" value={formData.description || ''} onChange={handleInputChange} />
+        </>
+    );
+
     return (
         <div className="admin-dashboard-container">
             <header className="dashboard-header">
@@ -163,7 +216,7 @@ const AdminDashboard = () => {
             </header>
 
             <div className="dashboard-tabs">
-                {['programs', 'notices', 'scoreboard'].map(tab => (
+                {['programs', 'notices', 'scoreboard', 'gallery'].map(tab => (
                     <button
                         key={tab}
                         className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
@@ -182,11 +235,12 @@ const AdminDashboard = () => {
                         {activeTab === 'programs' && renderProgramInputs()}
                         {activeTab === 'notices' && renderNoticeInputs()}
                         {activeTab === 'scoreboard' && renderScoreboardInputs()}
+                        {activeTab === 'gallery' && renderGalleryInputs()}
 
                         <div className="form-actions">
                             <button type="submit" className="btn btn-primary">{isEditing ? 'Update' : 'Add'}</button>
                             {isEditing && (
-                                <button type="button" className="btn btn-outline" onClick={() => { setIsEditing(false); setFormData({}); setEditId(null); }}>
+                                <button type="button" className="btn btn-outline" onClick={() => { setIsEditing(false); setFormData({}); setSelectedFile(null); setEditId(null); }}>
                                     Cancel
                                 </button>
                             )}
@@ -227,6 +281,16 @@ const AdminDashboard = () => {
                                             <h4>{item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉'} {item.type === 'individual' ? item.name : (item.teamName || item.groupName)}</h4>
                                             <p>{item.program}</p>
                                             <small>{item.college} | Score: {item.score} | Grade: {item.grade}</small>
+                                        </>
+                                    )}
+                                    {activeTab === 'gallery' && (
+                                        <>
+                                            <div style={{ width: '100%', height: '150px', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px' }}>
+                                                <img src={item.url} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.style.background = '#eee'; }} />
+                                            </div>
+                                            <h4>{item.title}</h4>
+                                            <p>{item.description}</p>
+                                            <small className={`badge ${item.category === 'onstage' ? 'badge-primary' : 'badge-secondary'}`}>{item.category}</small>
                                         </>
                                     )}
                                 </div>

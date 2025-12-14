@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import { galleryImages } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { galleryImages as mockGalleryImages } from '../data/mockData';
 import './Gallery.css';
 
 const Gallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [filterCategory, setFilterCategory] = useState('all');
+    const [galleryImages, setGalleryImages] = useState(mockGalleryImages);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/gallery')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    setGalleryImages(data);
+                }
+            })
+            .catch(err => console.error("Error fetching gallery:", err));
+    }, []);
 
     const filteredImages = filterCategory === 'all'
         ? galleryImages
@@ -65,10 +77,14 @@ const Gallery = () => {
                             style={{ animationDelay: `${index * 0.05}s` }}
                             onClick={() => openLightbox(image)}
                         >
-                            <div className="gallery-image-placeholder">
-                                <div className="placeholder-icon">📸</div>
-                                <div className="placeholder-text">{image.event}</div>
-                            </div>
+                            {image.url ? (
+                                <img src={image.url} alt={image.title} className="gallery-image" onError={(e) => { e.target.style.display = 'none'; }} />
+                            ) : (
+                                <div className="gallery-image-placeholder">
+                                    <div className="placeholder-icon">📸</div>
+                                    <div className="placeholder-text">{image.event}</div>
+                                </div>
+                            )}
                             <div className="gallery-overlay">
                                 <h4>{image.title}</h4>
                                 <p>{image.description}</p>
@@ -95,6 +111,18 @@ const Gallery = () => {
                             <span className={`badge ${selectedImage.category === 'offstage' ? 'badge-primary' : 'badge-secondary'}`}>
                                 {selectedImage.category}
                             </span>
+
+                            <div style={{ marginTop: '20px' }}>
+                                <a
+                                    href={selectedImage.url}
+                                    download
+                                    className="lightbox-download"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    📥 Download Image
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

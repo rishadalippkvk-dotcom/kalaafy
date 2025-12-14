@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "url": "http://localhost:5000/uploads/1765687506012-742302568.jpg",
+    "title": "Classical Dance Performance",
+    "category": "onstage",
+    "event": "Classical Dance",
+    "description": "Beautiful classical dance performance"
+  },
+  {
+    "id": 2,
+    "url": "/gallery/singing1.jpg",
+    "title": "Solo Singing Champion",
+    "category": "onstage",
+    "event": "Solo Singing",
+    "description": "Winner of solo singing competition"
+  },
+  {
+    "id": 3,
+    "url": "/gallery/drama1.jpg",
+    "title": "Drama Performance",
+    "category": "onstage",
+    "event": "Drama",
+    "description": "Intense drama performance"
+  },
+  {
+    "id": 4,
+    "url": "/gallery/debate1.jpg",
+    "title": "Debate Competition",
+    "category": "offstage",
+    "event": "Debate",
+    "description": "Heated debate session"
+  },
+  {
+    "id": 5,
+    "url": "/gallery/quiz1.jpg",
+    "title": "Quiz Competition",
+    "category": "offstage",
+    "event": "Quiz",
+    "description": "Intense quiz rounds"
+  },
+  {
+    "id": 6,
+    "url": "/gallery/western1.jpg",
+    "title": "Western Dance Group",
+    "category": "onstage",
+    "event": "Western Dance",
+    "description": "Energetic western dance performance"
+  },
+  {
+    "id": 7,
+    "url": "/gallery/comedy1.jpg",
+    "title": "Stand-up Comedy",
+    "category": "onstage",
+    "event": "Comedy",
+    "description": "Hilarious comedy performance"
+  },
+  {
+    "id": 8,
+    "url": "/gallery/photo1.jpg",
+    "title": "Photography Exhibition",
+    "category": "offstage",
+    "event": "Photography",
+    "description": "Award-winning photographs"
+  },
+  {
+    "id": 1765687564707,
+    "url": "/gallery/test_upload.jpg",
+    "title": "Test via Upload Form",
+    "category": "offstage",
+    "event": "Upload Test",
+    "description": "Testing file upload form submission."
+  }
+]

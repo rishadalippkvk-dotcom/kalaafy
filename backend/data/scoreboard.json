@@ -107,5 +107,17 @@
     "medal": "🥉",
     "grade": "B",
     "name": "PPH"
+  },
+  {
+    "id": 1765685076766,
+    "medal": "🥇",
+    "type": "individual",
+    "category": "onstage",
+    "program": "dance",
+    "rank": "1",
+    "score": "3",
+    "grade": "B",
+    "name": "Rishad Ali P P",
+    "college": "duxford"
   }
 ]
