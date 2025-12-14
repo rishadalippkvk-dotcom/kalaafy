@@ -168,10 +168,21 @@ const AdminDashboard = () => {
                 <option value="offstage">Offstage</option>
             </select>
             <input name="program" placeholder="Program Name" value={formData.program || ''} onChange={handleInputChange} required />
+            <div style={{ display: 'flex', gap: '10px' }}>
+                <input name="chestNumber" placeholder="Chest No" value={formData.chestNumber || ''} onChange={handleInputChange} style={{ flex: 1 }} />
+                <input name="department" placeholder="Department" value={formData.department || ''} onChange={handleInputChange} style={{ flex: 1 }} />
+            </div>
             <input name="rank" type="number" placeholder="Rank (1, 2, 3)" value={formData.rank || ''} onChange={handleInputChange} required />
             <input name="score" type="number" placeholder="Score" value={formData.score || ''} onChange={handleInputChange} required />
-            <input name="college" placeholder="College Name" value={formData.college || ''} onChange={handleInputChange} required />
-            <input name="medal" placeholder="Medal (🥇, 🥈, 🥉)" value={formData.medal || ''} onChange={handleInputChange} />
+
+            {/* Group/College Selection */}
+            <select name="college" value={formData.college || ''} onChange={handleInputChange} required>
+                <option value="">Select Group (House)</option>
+                <option value="ASTRA">ASTRA</option>
+                <option value="LOKHA">LOKHA</option>
+                <option value="EAKHA">EAKHA</option>
+            </select>
+
             <select name="grade" value={formData.grade || ''} onChange={handleInputChange}>
                 <option value="">Select Grade</option>
                 <option value="A">A</option>
@@ -304,7 +315,7 @@ const AdminDashboard = () => {
             <style>{`
                 .admin-dashboard-container {
                     padding: 20px;
-                    background: #f4f6f8;
+                    background: linear-gradient(135deg, #fffdf2 0%, #ffe082 100%);
                     min-height: 100vh;
                 }
                 .dashboard-header {

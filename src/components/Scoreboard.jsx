@@ -1,202 +1,291 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { individualScores, groupScores } from '../data/mockData';
 import './Scoreboard.css';
 
 const Scoreboard = () => {
-    const [scoreType, setScoreType] = useState('individual');
-    const [filterCategory, setFilterCategory] = useState('all');
-    // Initialize with mock data as fallback/default
-    const [scores, setScores] = useState([
-        ...individualScores.map(s => ({ ...s, type: 'individual' })),
-        ...groupScores.map(s => ({ ...s, type: 'group' }))
-    ]);
-
-    // Calculate Group Standings (ASTRA, LOKHA, EAKHA)
-    const groupStandings = useMemo(() => {
-        const standings = { ASTRA: 0, LOKHA: 0, EAKHA: 0 };
-
-        scores.forEach(score => {
-            const rank = parseInt(score.rank);
-            let points = 0;
-
-            // Scoring Rules:
-            // Individual: 1st=5, 2nd=3, 3rd=1
-            // Group: 1st=10, 2nd=7, 3rd=4
-            if (score.type === 'individual') {
-                if (rank === 1) points = 5;
-                else if (rank === 2) points = 3;
-                else if (rank === 3) points = 1;
-            } else if (score.type === 'group') {
-                if (rank === 1) points = 10;
-                else if (rank === 2) points = 7;
-                else if (rank === 3) points = 4;
-            }
-
-            // Accumulate points if the college/group matches
-            if (points > 0 && standings[score.college] !== undefined) {
-                standings[score.college] += points;
-            }
-        });
-
-        return Object.entries(standings)
-            .map(([group, score]) => ({ group, score }))
-            .sort((a, b) => b.score - a.score);
-    }, [scores]);
+    const [scores, setScores] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const [lastUpdated, setLastUpdated] = useState(new Date());
+    const [activeTab, setActiveTab] = useState('overall'); // 'overall', 'individual', 'group'
 
     useEffect(() => {
         fetch('http://localhost:5000/api/scoreboard')
             .then(res => res.json())
-            .then(data => setScores(data))
-            .catch(err => console.error("Error fetching scoreboard:", err));
+            .then(data => {
+                setScores(data);
+                setLastUpdated(new Date());
+            })
+            .catch(err => console.error("Error fetching scores:", err));
     }, []);
 
-    const currentScores = scores.filter(s => s.type === scoreType);
+    // Core Calculation Logic
+    const groupStats = useMemo(() => {
+        // Initialize specific groups
+        const stats = {
+            ASTRA: { individual: 0, group: 0, total: 0, events: [] },
+            LOKHA: { individual: 0, group: 0, total: 0, events: [] },
+            EAKHA: { individual: 0, group: 0, total: 0, events: [] }
+        };
 
-    const filteredScores = filterCategory === 'all'
-        ? currentScores
-        : currentScores.filter(score => score.category === filterCategory);
+        // Helper to normalize group names
+        const normalize = (name) => {
+            if (!name) return 'UNKNOWN';
+            return name.toUpperCase();
+        };
 
-    // Sort by rank ascending
-    filteredScores.sort((a, b) => a.rank - b.rank);
+        scores.forEach(entry => {
+            const groupName = normalize(entry.college);
+            if (!stats[groupName]) {
+                stats[groupName] = { individual: 0, group: 0, total: 0, events: [] };
+            }
 
-    const topThree = filteredScores.slice(0, 3);
-    const restScores = filteredScores.slice(3);
+            const rank = parseInt(entry.rank);
+            let points = 0;
+
+            if (entry.type === 'individual') {
+                if (rank === 1) points = 5;
+                else if (rank === 2) points = 3;
+                else if (rank === 3) points = 1;
+
+                if (points > 0) {
+                    stats[groupName].individual += points;
+                    stats[groupName].events.push({ ...entry, points });
+                }
+            } else if (entry.type === 'group') {
+                if (rank === 1) points = 10;
+                else if (rank === 2) points = 7;
+                else if (rank === 3) points = 4;
+
+                if (points > 0) {
+                    stats[groupName].group += points;
+                    stats[groupName].events.push({ ...entry, points });
+                }
+            }
+
+            stats[groupName].total = stats[groupName].individual + stats[groupName].group;
+        });
+
+        // Convert to array and sort based on activeTab
+        const statsArray = Object.entries(stats).map(([name, data]) => ({
+            name,
+            ...data
+        }));
+
+        statsArray.sort((a, b) => {
+            if (activeTab === 'individual') {
+                if (b.individual !== a.individual) return b.individual - a.individual;
+                return b.total - a.total; // Tie-breaker
+            } else if (activeTab === 'group') {
+                if (b.group !== a.group) return b.group - a.group;
+                return b.total - a.total; // Tie-breaker
+            } else {
+                // Overall
+                if (b.total !== a.total) return b.total - a.total;
+                if (b.group !== a.group) return b.group - a.group;
+                return b.individual - a.individual;
+            }
+        });
+
+        return statsArray;
+    }, [scores, activeTab]);
+
+    const handleGroupClick = (group) => {
+        setSelectedGroup(group);
+    };
+
+    const closeModal = () => {
+        setSelectedGroup(null);
+    };
 
     return (
         <section id="scoreboard" className="section scoreboard-section">
             <div className="container">
-                <h2 className="section-title">Scoreboard</h2>
-
-                {/* Main Group Standings */}
-                {/* Main Group Standings */}
-                <div className="group-standings-card">
-                    <h3 className="standings-title">🏆 Championship Standings</h3>
-                    <div className="standings-grid">
-                        {groupStandings.map((group, index) => (
-                            <div key={group.group} className={`standings-item rank-${index + 1} ${index === 0 ? 'leader' : ''}`}>
-                                <div className="standing-rank">
-                                    {index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : ''}
-                                    {group.group}
-                                </div>
-                                <div className="standing-score">
-                                    {group.score}
-                                </div>
-                                <div className="standing-label">Points</div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="section-header text-center">
+                    <h2 className="section-title">🏆 Official Scoreboard</h2>
+                    <p className="last-updated">
+                        Last updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                 </div>
 
-                <div className="scoreboard-controls">
-                    <div className="tabs">
-                        <button
-                            className={`tab ${scoreType === 'individual' ? 'active' : ''}`}
-                            onClick={() => setScoreType('individual')}
-                        >
-                            👤 Individual
-                        </button>
-                        <button
-                            className={`tab ${scoreType === 'group' ? 'active' : ''}`}
-                            onClick={() => setScoreType('group')}
-                        >
-                            👥 Group
-                        </button>
-                    </div>
-
-                    <div className="tabs">
-                        <button
-                            className={`tab ${filterCategory === 'all' ? 'active' : ''}`}
-                            onClick={() => setFilterCategory('all')}
-                        >
-                            All
-                        </button>
-                        <button
-                            className={`tab ${filterCategory === 'offstage' ? 'active' : ''}`}
-                            onClick={() => setFilterCategory('offstage')}
-                        >
-                            Offstage
-                        </button>
-                        <button
-                            className={`tab ${filterCategory === 'onstage' ? 'active' : ''}`}
-                            onClick={() => setFilterCategory('onstage')}
-                        >
-                            Onstage
-                        </button>
-                    </div>
+                <div className="scoreboard-tabs">
+                    <button
+                        className={`scoreboard-tab ${activeTab === 'overall' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('overall')}
+                    >
+                        Overall
+                    </button>
+                    <button
+                        className={`scoreboard-tab ${activeTab === 'individual' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('individual')}
+                    >
+                        👤 Individual
+                    </button>
+                    <button
+                        className={`scoreboard-tab ${activeTab === 'group' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('group')}
+                    >
+                        👥 Group
+                    </button>
                 </div>
 
-                {topThree.length >= 3 && (
-                    <div className="podium">
-                        <div className="podium-item second">
-                            <div className="podium-rank">🥈</div>
-                            <h3>{scoreType === 'individual' ? topThree[1].name : topThree[1].teamName}</h3>
-                            <p className="podium-college">{topThree[1].college}</p>
-                            <p className="podium-program">{topThree[1].program}</p>
-                            <div className="podium-score">{topThree[1].score}</div>
-                        </div>
-
-                        <div className="podium-item first">
-                            <div className="podium-rank">🥇</div>
-                            <h3>{scoreType === 'individual' ? topThree[0].name : topThree[0].teamName}</h3>
-                            <p className="podium-college">{topThree[0].college}</p>
-                            <p className="podium-program">{topThree[0].program}</p>
-                            <div className="podium-score">{topThree[0].score}</div>
-                        </div>
-
-                        <div className="podium-item third">
-                            <div className="podium-rank">🥉</div>
-                            <h3>{scoreType === 'individual' ? topThree[2].name : topThree[2].teamName}</h3>
-                            <p className="podium-college">{topThree[2].college}</p>
-                            <p className="podium-program">{topThree[2].program}</p>
-                            <div className="podium-score">{topThree[2].score}</div>
-                        </div>
-                    </div>
-                )}
-
-                <div className="table-container">
-                    <table>
+                <div className="scoreboard-table-wrapper">
+                    <table className="scoreboard-table">
                         <thead>
                             <tr>
-                                <th>Rank</th>
-                                <th>{scoreType === 'individual' ? 'Name' : 'Team Name'}</th>
-                                <th>College</th>
-                                <th>Program</th>
-                                <th>Grade</th>
-                                {scoreType === 'group' && <th>Members</th>}
-                                <th>Score</th>
+                                <th>Group Name</th>
+                                {(activeTab === 'overall' || activeTab === 'individual') && <th>👤 Individual Points</th>}
+                                {(activeTab === 'overall' || activeTab === 'group') && <th>👥 Group Points</th>}
+                                <th>{activeTab === 'overall' ? 'Total Points' : activeTab === 'individual' ? 'Indiv. Total' : 'Group Total'}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredScores.map((score, index) => (
-                                <tr key={index} className="score-row">
+                            {groupStats.map((group, index) => (
+                                <tr
+                                    key={group.name}
+                                    onClick={() => handleGroupClick(group)}
+                                    className={index === 0 ? 'leader-row' : ''}
+                                    title="Click for details"
+                                >
                                     <td>
-                                        <span className="rank-badge">{score.rank}</span>
+                                        <strong>{group.name}</strong>
+                                        {index === 0 && <span className="leader-badge"> 👑 Leader</span>}
                                     </td>
-                                    <td className="name-cell">
-                                        {score.medal && <span className="medal">{score.medal}</span>}
-                                        {scoreType === 'individual' ? score.name : score.teamName}
-                                    </td>
-                                    <td>{score.college}</td>
-                                    <td>
-                                        <span className={`badge ${score.category === 'offstage' ? 'badge-primary' : 'badge-secondary'}`}>
-                                            {score.program}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span className={`grade-badge grade-${score.grade}`}>{score.grade}</span>
-                                    </td>
-                                    {scoreType === 'group' && <td>{score.members}</td>}
-                                    <td>
-                                        <span className="score-value">{score.score}</span>
+                                    {(activeTab === 'overall' || activeTab === 'individual') && <td>{group.individual}</td>}
+                                    {(activeTab === 'overall' || activeTab === 'group') && <td>{group.group}</td>}
+                                    <td className="total-points">
+                                        {activeTab === 'overall' ? group.total : activeTab === 'individual' ? group.individual : group.group}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Separate Participants Table */}
+                <div className="participants-section">
+                    <h3 className="section-subtitle">📋 All Participants & Results</h3>
+                    <div className="scoreboard-table-wrapper">
+                        <table className="scoreboard-table participants-table">
+                            <thead>
+                                <tr>
+                                    <th>Chest No</th>
+                                    <th>Name</th>
+                                    <th>Program</th>
+                                    <th>Department</th>
+                                    <th>Group</th>
+                                    <th>Grade</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {scores.length > 0 ? (
+                                    scores.map((score, index) => (
+                                        <tr key={score.id || index}>
+                                            <td><span className="badge badge-secondary">{score.chestNumber || '-'}</span></td>
+                                            <td>
+                                                {score.medal && <span className="medal">{score.medal}</span>}
+                                                {score.type === 'individual' ? score.name : score.teamName}
+                                            </td>
+                                            <td>{score.program}</td>
+                                            <td>{score.department || '-'}</td>
+                                            <td><strong>{score.college}</strong></td>
+                                            <td><span className={`grade-badge grade-${score.grade}`}>{score.grade}</span></td>
+                                            <td><strong>{score.score}</strong></td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="7" className="text-center">No participants found.</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="ranking-rules">
+                    <small>
+                        * Ranking based on Total Points. Tie-breakers: Higher Group Points &rarr; Higher Individual Points.
+                        <br />
+                        * Individual: 1st(5), 2nd(3), 3rd(1) | Group: 1st(10), 2nd(7), 3rd(4)
+                    </small>
+                </div>
+
+                {/* Detailed Breakdown Modal */}
+                {selectedGroup && (
+                    <div className="modal-overlay" onClick={closeModal}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <button className="modal-close" onClick={closeModal}>&times;</button>
+
+                            <div className="modal-header">
+                                <h3>{selectedGroup.name}</h3>
+                                <p>Score Breakdown</p>
+                            </div>
+
+                            <div className="modal-stats">
+                                <div className="stat-box">
+                                    <div className="stat-label">Individual</div>
+                                    <div className="stat-value">{selectedGroup.individual}</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-label">Group</div>
+                                    <div className="stat-value">{selectedGroup.group}</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-label">Total</div>
+                                    <div className="stat-value" style={{ color: '#d35400' }}>{selectedGroup.total}</div>
+                                </div>
+                            </div>
+
+                            <div className="modal-body">
+                                <div className="breakdown-section">
+                                    <h4 className="breakdown-title">👥 Group Competitions</h4>
+                                    <ul className="event-list">
+                                        {selectedGroup.events.filter(e => e.type === 'group').length > 0 ? (
+                                            selectedGroup.events.filter(e => e.type === 'group').map((e, i) => (
+                                                <li key={i} className="event-item">
+                                                    <span className="event-name">
+                                                        {e.medal} {e.program} ({e.rank}{getOrdinal(e.rank)})
+                                                    </span>
+                                                    <span className="event-points">+{e.points}</span>
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <li className="text-muted">No group points yet.</li>
+                                        )}
+                                    </ul>
+                                </div>
+
+                                <div className="breakdown-section">
+                                    <h4 className="breakdown-title">👤 Individual Competitions</h4>
+                                    <ul className="event-list">
+                                        {selectedGroup.events.filter(e => e.type === 'individual').length > 0 ? (
+                                            selectedGroup.events.filter(e => e.type === 'individual').map((e, i) => (
+                                                <li key={i} className="event-item">
+                                                    <span className="event-name">
+                                                        {e.medal} {e.program} - {e.name} ({e.rank}{getOrdinal(e.rank)})
+                                                    </span>
+                                                    <span className="event-points">+{e.points}</span>
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <li className="text-muted">No individual points yet.</li>
+                                        )}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </section>
     );
 };
+
+// Helper for ordinal suffix (1st, 2nd, 3rd)
+function getOrdinal(n) {
+    const s = ["th", "st", "nd", "rd"];
+    const v = n % 100;
+    return s[(v - 20) % 10] || s[v] || s[0];
+}
 
 export default Scoreboard;

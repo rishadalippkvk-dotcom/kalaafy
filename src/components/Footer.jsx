@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import logo from '../assets/logo.png';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -10,8 +11,7 @@ const Footer = () => {
                 <div className="footer-content">
                     <div className="footer-section">
                         <div className="footer-logo">
-                            <span className="logo-icon">🎨</span>
-                            <span className="logo-text">Kalaafy</span>
+                            <img src={logo} alt="Kalaafy Logo" className="footer-logo-image" />
                         </div>
                         <p className="footer-tagline">
                             Celebrating artistic excellence and creativity across colleges.
