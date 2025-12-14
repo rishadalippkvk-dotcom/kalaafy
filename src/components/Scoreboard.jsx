@@ -68,32 +68,20 @@ const Scoreboard = () => {
                 <h2 className="section-title">Scoreboard</h2>
 
                 {/* Main Group Standings */}
-                <div className="group-standings-card" style={{
-                    background: 'var(--card-bg, #1a1a1a)',
-                    padding: '20px',
-                    borderRadius: '12px',
-                    marginBottom: '30px',
-                    border: '1px solid var(--border-color, #333)'
-                }}>
-                    <h3 style={{ textAlign: 'center', marginBottom: '20px', color: 'var(--primary-color, #ffd700)' }}>🏆 Championship Standings</h3>
-                    <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+                {/* Main Group Standings */}
+                <div className="group-standings-card">
+                    <h3 className="standings-title">🏆 Championship Standings</h3>
+                    <div className="standings-grid">
                         {groupStandings.map((group, index) => (
-                            <div key={group.group} style={{
-                                textAlign: 'center',
-                                padding: '15px',
-                                minWidth: '150px',
-                                background: index === 0 ? 'rgba(255, 215, 0, 0.1)' : 'transparent',
-                                borderRadius: '8px',
-                                border: index === 0 ? '1px solid #ffd700' : '1px solid #444'
-                            }}>
-                                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>
+                            <div key={group.group} className={`standings-item rank-${index + 1} ${index === 0 ? 'leader' : ''}`}>
+                                <div className="standing-rank">
                                     {index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : ''}
                                     {group.group}
                                 </div>
-                                <div style={{ fontSize: '2rem', fontWeight: '800', color: index === 0 ? '#ffd700' : '#fff' }}>
+                                <div className="standing-score">
                                     {group.score}
                                 </div>
-                                <div style={{ fontSize: '0.9rem', opacity: 0.7 }}>Points</div>
+                                <div className="standing-label">Points</div>
                             </div>
                         ))}
                     </div>

@@ -138,6 +138,7 @@ h6 {
 /* Utility Classes */
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
 }
@@ -148,6 +149,7 @@ h6 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .section-title {
@@ -402,6 +404,29 @@ h6 {
   .grid-4 {
     grid-template-columns: 1fr;
   }
+
+  .podium {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .podium-item {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Order for mobile column: 1st on top, then 2nd, then 3rd */
+  .podium-item.first {
+    order: 1;
+  }
+
+  .podium-item.second {
+    order: 2;
+  }
+
+  .podium-item.third {
+    order: 3;
+  }
 }
 
 /* Loading Spinner */
@@ -498,6 +523,7 @@ tbody tr:hover {
   justify-content: center;
   gap: var(--spacing-md);
   margin: var(--spacing-xl) 0;
+  flex-wrap: wrap;
 }
 
 .podium-item {
