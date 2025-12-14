@@ -1,27 +1,27 @@
 :root {
-  /* Color Palette - Vibrant & Modern */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  /* Color Palette - Vibrant Red/Blue/Yellow/Green */
+  --primary-gradient: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+  --secondary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  --accent-gradient: linear-gradient(135deg, #ffe259 0%, #ffa751 100%);
+  --success-gradient: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+  --warning-gradient: linear-gradient(135deg, #FDC830 0%, #F37335 100%);
 
-  --primary: #667eea;
-  --primary-dark: #5568d3;
-  --secondary: #f5576c;
-  --accent: #00f2fe;
-  --success: #43e97b;
-  --warning: #fee140;
+  --primary: #FF416C;
+  --primary-dark: #D9365A;
+  --secondary: #2193b0;
+  --accent: #ffe259;
+  --success: #56ab2f;
+  --warning: #FDC830;
 
-  /* Dark Theme Colors */
-  --bg-primary: #0a0e27;
-  --bg-secondary: #151932;
-  --bg-tertiary: #1e2139;
-  --bg-card: rgba(30, 33, 57, 0.6);
-  --bg-glass: rgba(255, 255, 255, 0.05);
+  /* Light Theme Colors (Yellowish White) */
+  --bg-primary: #FFFFE0;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F0E68C;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-glass: rgba(255, 255, 255, 0.4);
 
-  --text-primary: #ffffff;
-  --text-secondary: #b4b7c9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
   --text-muted: #6b7280;
 
   /* Spacing */

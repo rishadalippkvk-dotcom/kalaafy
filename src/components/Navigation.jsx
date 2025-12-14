@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navigation.css';
+import logo from '../assets/logo.png';
 
 const Navigation = () => {
     const scrollToSection = (sectionId) => {
@@ -13,8 +14,7 @@ const Navigation = () => {
         <nav className="navigation">
             <div className="nav-container">
                 <div className="nav-logo">
-                    <span className="logo-icon">🎨</span>
-                    <span className="logo-text">Kalaafy</span>
+                    <img src={logo} alt="Kalaafy Logo" className="logo-image" onClick={() => scrollToSection('home')} />
                 </div>
 
                 <ul className="nav-links">
