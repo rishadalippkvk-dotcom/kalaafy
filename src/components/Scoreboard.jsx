@@ -100,7 +100,7 @@ const Scoreboard = () => {
         <section id="scoreboard" className="section scoreboard-section">
             <div className="container">
                 <div className="section-header text-center">
-                    <h2 className="section-title">🏆 Official Scoreboard</h2>
+                    <h2 className="section-title">Official Scoreboard</h2>
                     <p className="last-updated">
                         Last updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -132,8 +132,8 @@ const Scoreboard = () => {
                         <thead>
                             <tr>
                                 <th>Group Name</th>
-                                {(activeTab === 'overall' || activeTab === 'individual') && <th>👤 Individual Points</th>}
-                                {(activeTab === 'overall' || activeTab === 'group') && <th>👥 Group Points</th>}
+                                {(activeTab === 'overall' || activeTab === 'individual') && <th>Individual Points</th>}
+                                {(activeTab === 'overall' || activeTab === 'group') && <th>Group Points</th>}
                                 <th>{activeTab === 'overall' ? 'Total Points' : activeTab === 'individual' ? 'Indiv. Total' : 'Group Total'}</th>
                             </tr>
                         </thead>
@@ -147,7 +147,7 @@ const Scoreboard = () => {
                                 >
                                     <td>
                                         <strong>{group.name}</strong>
-                                        {index === 0 && <span className="leader-badge"> 👑 Leader</span>}
+                                        {index === 0 && <span className="leader-badge"> Leader</span>}
                                     </td>
                                     {(activeTab === 'overall' || activeTab === 'individual') && <td>{group.individual}</td>}
                                     {(activeTab === 'overall' || activeTab === 'group') && <td>{group.group}</td>}
@@ -162,7 +162,7 @@ const Scoreboard = () => {
 
                 {/* Separate Participants Table */}
                 <div className="participants-section">
-                    <h3 className="section-subtitle">📋 All Participants & Results</h3>
+                    <h3 className="section-subtitle">All Participants & Results</h3>
                     <div className="scoreboard-table-wrapper">
                         <table className="scoreboard-table participants-table">
                             <thead>
@@ -182,7 +182,7 @@ const Scoreboard = () => {
                                         <tr key={score.id || index}>
                                             <td><span className="badge badge-secondary">{score.chestNumber || '-'}</span></td>
                                             <td>
-                                                {score.medal && <span className="medal">{score.medal}</span>}
+                                                {/* Medal removed */}
                                                 {score.type === 'individual' ? score.name : score.teamName}
                                             </td>
                                             <td>{score.program}</td>
@@ -202,11 +202,11 @@ const Scoreboard = () => {
                     </div>
                 </div>
 
-                <div className="ranking-rules">
-                    <small>
-                        * Ranking based on Total Points. Tie-breakers: Higher Group Points &rarr; Higher Individual Points.
+                <div className="ranking-rules" style={{ textAlign: 'center' }}>
+                    <small><br />
+                        Ranking based on Total Points. Tie-breakers: Higher Group Points &rarr; Higher Individual Points.
                         <br />
-                        * Individual: 1st(5), 2nd(3), 3rd(1) | Group: 1st(10), 2nd(7), 3rd(4)
+                        Individual: 1st(5), 2nd(3), 3rd(1) <br />Group: 1st(10), 2nd(7), 3rd(4)
                     </small>
                 </div>
 

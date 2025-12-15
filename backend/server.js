@@ -6,9 +6,14 @@ const path = require('path');
 const multer = require('multer');
 
 // Configure Multer Storage
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR);
+}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -179,12 +184,18 @@ app.get('/api/gallery', (req, res) => {
 });
 
 app.post('/api/gallery', upload.single('image'), (req, res) => {
+    console.log("Received request:", req.body);
+
     const images = readData(GALLERY_FILE);
+
 
     let imageUrl = req.body.url;
     if (req.file) {
+        console.log("File uploaded:", req.file);
         imageUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
     }
+
+    console.log("Image URL:", imageUrl);
 
     const newImage = {
         id: Date.now(),

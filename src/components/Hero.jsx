@@ -1,7 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Hero.css';
 
 const Hero = () => {
+    const [groupScores, setGroupScores] = useState([]);
+
+    useEffect(() => {
+        fetchScoreboardData();
+        const interval = setInterval(fetchScoreboardData, 5000); // Live update every 5 seconds
+        return () => clearInterval(interval);
+    }, []);
+
+    const fetchScoreboardData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/scoreboard');
+            const data = await response.json();
+            calculateScores(data);
+        } catch (error) {
+            console.error("Error fetching scoreboard data:", error);
+        }
+    };
+
+    const calculateScores = (data) => {
+        const groups = {
+            'ASTRA': { name: 'ASTRA', total: 0 },
+            'LOKHA': { name: 'LOKHA', total: 0 },
+            'EAKHA': { name: 'EAKHA', total: 0 }
+        };
+
+        data.forEach(item => {
+            const groupName = item.college;
+            
+            if (groups[groupName]) {
+                // Normalize the rank to a number
+                const rank = parseInt(item.rank);
+                let points = 0;
+                
+                if (item.type === 'individual') {
+                    if (rank === 1) points = 5;
+                    else if (rank === 2) points = 3;
+                    else if (rank === 3) points = 1;
+                } else if (item.type === 'group') {
+                    if (rank === 1) points = 10;
+                    else if (rank === 2) points = 7;
+                    else if (rank === 3) points = 4;
+                }
+                
+                groups[groupName].total += points;
+            }
+        });
+
+        const sortedGroups = Object.values(groups).sort((a, b) => b.total - a.total);
+        setGroupScores(sortedGroups);
+    };
+
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
         if (element) {
@@ -13,7 +64,7 @@ const Hero = () => {
         <section id="home" className="hero">
             <div className="hero-content animate-fadeInUp">
                 <div className="hero-badge">
-                    <span className="badge badge-primary">Arts Festival 2024</span>
+                    <span className="badge badge-primary">Arts Festival 2025</span>
                 </div>
 
                 <h1 className="hero-title">
@@ -26,18 +77,21 @@ const Hero = () => {
                 </p>
 
                 <div className="hero-stats">
-                    <div className="stat-item">
-                        <div className="stat-number">15+</div>
-                        <div className="stat-label">Programs</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-number">500+</div>
-                        <div className="stat-label">Participants</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-number">10+</div>
-                        <div className="stat-label">Colleges</div>
-                    </div>
+                    {groupScores.length > 0 ? (
+                        groupScores.map((group, index) => (
+                            <div className="stat-item" key={group.name}>
+                                <div className="stat-number">{group.total}</div>
+                                <div className="stat-label">{group.name}</div>
+                            </div>
+                        ))
+                    ) : (
+                        // Fallback/Loading state
+                        <>
+                            <div className="stat-item"><div className="stat-number">-</div><div className="stat-label">ASTRA</div></div>
+                            <div className="stat-item"><div className="stat-number">-</div><div className="stat-label">LOKHA</div></div>
+                            <div className="stat-item"><div className="stat-number">-</div><div className="stat-label">EAKHA</div></div>
+                        </>
+                    )}
                 </div>
 
                 <div className="hero-actions">

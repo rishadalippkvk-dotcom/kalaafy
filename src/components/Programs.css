@@ -14,7 +14,7 @@
 }
 
 .program-icon {
-    font-size: 4rem;
+    font-size: 2rem;
     margin-bottom: var(--spacing-md);
     text-align: center;
     animation: float 3s ease-in-out infinite;
