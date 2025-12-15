@@ -33,6 +33,12 @@
     cursor: pointer;
 }
 
+.admin-btn {
+    font-weight: bold;
+    color: #007bff;
+    /* distinguish admin button */
+}
+
 /* Hamburger icon */
 .menu-icon {
     display: none;

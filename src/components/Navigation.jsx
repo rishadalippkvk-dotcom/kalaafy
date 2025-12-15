@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Navigation.css';
 import logo from '../assets/logo.png';
 
 const Navigation = () => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     const scrollToSection = (sectionId) => {
         setOpen(false); // Close menu on click
@@ -11,6 +13,11 @@ const Navigation = () => {
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
+    };
+
+    const handleAdminClick = () => {
+        setOpen(false);
+        navigate('/admin/login');
     };
 
     return (
@@ -25,6 +32,7 @@ const Navigation = () => {
                 <a onClick={() => scrollToSection('scoreboard')}>Scoreboard</a>
                 <a onClick={() => scrollToSection('notices')}>Notices</a>
                 <a onClick={() => scrollToSection('gallery')}>Gallery</a>
+                <a onClick={handleAdminClick} className="admin-btn">Admin Panel</a>
             </div>
 
             <div className="menu-icon" onClick={() => setOpen(!open)}>
