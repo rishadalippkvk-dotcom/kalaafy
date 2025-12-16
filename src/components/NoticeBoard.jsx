@@ -6,7 +6,7 @@ const NoticeBoard = () => {
     const [notices, setNotices] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/notices')
+        fetch('https://api-kalaafi-backend.onrender.com/api/notices')
             .then(res => res.json())
             .then(data => setNotices(data))
             .catch(err => console.error("Error fetching notices:", err));

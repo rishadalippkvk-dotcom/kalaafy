@@ -12,7 +12,7 @@ const Hero = () => {
 
     const fetchScoreboardData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/scoreboard');
+            const response = await fetch('https://api-kalaafi-backend.onrender.com/api/scoreboard');
             const data = await response.json();
             calculateScores(data);
         } catch (error) {
@@ -29,12 +29,12 @@ const Hero = () => {
 
         data.forEach(item => {
             const groupName = item.college;
-            
+
             if (groups[groupName]) {
                 // Normalize the rank to a number
                 const rank = parseInt(item.rank);
                 let points = 0;
-                
+
                 if (item.type === 'individual') {
                     if (rank === 1) points = 5;
                     else if (rank === 2) points = 3;
@@ -44,7 +44,7 @@ const Hero = () => {
                     else if (rank === 2) points = 7;
                     else if (rank === 3) points = 4;
                 }
-                
+
                 groups[groupName].total += points;
             }
         });

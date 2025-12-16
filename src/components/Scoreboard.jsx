@@ -8,7 +8,7 @@ const Scoreboard = () => {
     const [activeTab, setActiveTab] = useState('overall'); // 'overall', 'individual', 'group'
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/scoreboard')
+        fetch('https://api-kalaafi-backend.onrender.com/api/scoreboard')
             .then(res => res.json())
             .then(data => {
                 setScores(data);

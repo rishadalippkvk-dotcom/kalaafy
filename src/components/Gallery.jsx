@@ -8,7 +8,7 @@ const Gallery = () => {
     const [galleryImages, setGalleryImages] = useState(mockGalleryImages);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/gallery')
+        fetch('https://api-kalaafi-backend.onrender.com/api/gallery')
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) {
@@ -50,24 +50,24 @@ const Gallery = () => {
             // Fetch the image as a blob
             const response = await fetch(imageUrl);
             const blob = await response.blob();
-            
+
             // Create a blob URL
             const blobUrl = URL.createObjectURL(blob);
-            
+
             // Create a temporary link element
             const link = document.createElement('a');
             link.href = blobUrl;
             link.download = imageName || 'kalaafy-image.jpg';
-            
+
             // Append to the body
             document.body.appendChild(link);
-            
+
             // Trigger the download
             link.click();
-            
+
             // Remove the link from the document
             document.body.removeChild(link);
-            
+
             // Release the blob URL
             URL.revokeObjectURL(blobUrl);
         } catch (error) {

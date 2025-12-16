@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/${activeTab}`);
+            const res = await fetch(`https://api-kalaafi-backend.onrender.com/api/${activeTab}`);
             const data = await res.json();
             setItems(data);
         } catch (error) {
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure?")) return;
         try {
-            await fetch(`http://localhost:5000/api/${activeTab}/${id}`, { method: 'DELETE' });
+            await fetch(`https://api-kalaafi-backend.onrender.com/api/${activeTab}/${id}`, { method: 'DELETE' });
             fetchData();
         } catch (error) {
             console.error("Error deleting:", error);
