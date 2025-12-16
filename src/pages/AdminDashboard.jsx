@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import '../components/Navigation.css';
 
 const AdminDashboard = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
 
     const [activeTab, setActiveTab] = useState('programs');
     const [items, setItems] = useState([]);
@@ -14,10 +10,7 @@ const AdminDashboard = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
 
-    // Initial load check
-    useEffect(() => {
-        if (!user) navigate('/admin/login');
-    }, [user, navigate]);
+
 
     const fetchData = async () => {
         try {
@@ -251,7 +244,6 @@ const AdminDashboard = () => {
         <div className="admin-dashboard-container">
             <header className="dashboard-header">
                 <h2>Admin Dashboard</h2>
-                <button onClick={logout} className="btn btn-secondary">Logout</button>
             </header>
 
             <div className="dashboard-tabs">

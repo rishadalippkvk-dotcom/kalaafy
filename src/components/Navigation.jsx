@@ -32,7 +32,7 @@ const Navigation = () => {
                 <a onClick={() => scrollToSection('scoreboard')}>Scoreboard</a>
                 <a onClick={() => scrollToSection('notices')}>Notices</a>
                 <a onClick={() => scrollToSection('gallery')}>Gallery</a>
-                <a onClick={handleAdminClick} className="admin-btn">Admin Panel</a>
+                {/* <a onClick={handleAdminClick} className="admin-btn">Admin Panel</a> */}
             </div>
 
             <div className="menu-icon" onClick={() => setOpen(!open)}>

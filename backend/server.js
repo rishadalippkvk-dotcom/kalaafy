@@ -33,7 +33,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const DATA_DIR = path.join(__dirname, 'data');
 const PROGRAMS_FILE = path.join(DATA_DIR, 'programs.json');
 const NOTICES_FILE = path.join(DATA_DIR, 'notices.json');
-const ADMINS_FILE = path.join(DATA_DIR, 'admins.json');
 const SCOREBOARD_FILE = path.join(DATA_DIR, 'scoreboard.json');
 const GALLERY_FILE = path.join(DATA_DIR, 'gallery.json');
 
@@ -52,19 +51,6 @@ const readData = (file) => {
 const writeData = (file, data) => {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
-
-// Login Endpoint
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    const admins = readData(ADMINS_FILE);
-    const admin = admins.find(a => a.username === username && a.password === password);
-
-    if (admin) {
-        res.json({ success: true, token: 'admin-token-123' });
-    } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-});
 
 // --- Programs CRUD ---
 
