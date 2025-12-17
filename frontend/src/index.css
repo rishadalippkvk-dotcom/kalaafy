@@ -1,28 +1,21 @@
 :root {
-  /* Color Palette - Vibrant & Modern */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  /* Color Palette - Vibrant Red/Blue/Yellow/Green */
+  --primary-gradient: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+  --secondary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  --accent-gradient: linear-gradient(135deg, #ffe259 0%, #ffa751 100%);
+  --success-gradient: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+  --warning-gradient: linear-gradient(135deg, #FDC830 0%, #F37335 100%);
 
-  --primary: #667eea;
-  --primary-dark: #5568d3;
-  --secondary: #f5576c;
-  --accent: #00f2fe;
-  --success: #43e97b;
-  --warning: #fee140;
 
-  /* Dark Theme Colors */
-  --bg-primary: #0a0e27;
-  --bg-secondary: #151932;
-  --bg-tertiary: #1e2139;
-  --bg-card: rgba(30, 33, 57, 0.6);
-  --bg-glass: rgba(255, 255, 255, 0.05);
 
-  --text-primary: #ffffff;
-  --text-secondary: #b4b7c9;
-  --text-muted: #6b7280;
+  /* Theme Colors (Light/Yellow) */
+  --bg-primary: #ffffff;
+  /* Fallback */
+  --bg-secondary: #fff8e1;
+  --bg-tertiary: #ffecb3;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.6);
+
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -77,26 +70,17 @@ html {
 
 body {
   font-family: var(--font-primary);
-  background: var(--bg-primary);
+  background: radial-gradient(circle at top, #ffffff 0%, #ffe082 100%);
+  min-height: 100vh;
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
 }
 
 /* Background Pattern */
+/* Background Pattern (Disabled for Gradient Theme) */
 body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(245, 87, 108, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
+  content: none;
 }
 
 /* Typography */

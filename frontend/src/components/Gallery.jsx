@@ -43,6 +43,40 @@ const Gallery = () => {
         setSelectedImage(filteredImages[newIndex]);
     };
 
+    // Function to download image directly
+    const downloadImage = async (imageUrl, imageName) => {
+        try {
+            console.log('Downloading image:', imageUrl);
+            // Fetch the image as a blob
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            
+            // Create a blob URL
+            const blobUrl = URL.createObjectURL(blob);
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = imageName || 'kalaafy-image.jpg';
+            
+            // Append to the body
+            document.body.appendChild(link);
+            
+            // Trigger the download
+            link.click();
+            
+            // Remove the link from the document
+            document.body.removeChild(link);
+            
+            // Release the blob URL
+            URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error('Download failed:', error);
+            // Fallback: open in new tab if download fails
+            window.open(imageUrl, '_blank');
+        }
+    };
+
     return (
         <section id="gallery" className="section gallery-section">
             <div className="container">
@@ -101,10 +135,16 @@ const Gallery = () => {
                     <button className="lightbox-nav next" onClick={(e) => { e.stopPropagation(); navigateImage('next'); }}>›</button>
 
                     <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="lightbox-image-placeholder">
-                            <div className="placeholder-icon-large">📸</div>
-                            <h3>{selectedImage.event}</h3>
-                        </div>
+                        {selectedImage.url ? (
+                            <div className="lightbox-image-container">
+                                <img src={selectedImage.url} alt={selectedImage.title} className="lightbox-image" />
+                            </div>
+                        ) : (
+                            <div className="lightbox-image-placeholder">
+                                <div className="placeholder-icon-large">📸</div>
+                                <h3>{selectedImage.event}</h3>
+                            </div>
+                        )}
                         <div className="lightbox-info">
                             <h3>{selectedImage.title}</h3>
                             <p>{selectedImage.description}</p>
@@ -113,15 +153,12 @@ const Gallery = () => {
                             </span>
 
                             <div style={{ marginTop: '20px' }}>
-                                <a
-                                    href={selectedImage.url}
-                                    download
+                                <button
                                     className="lightbox-download"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    onClick={() => downloadImage(selectedImage.url, selectedImage.title)}
                                 >
                                     📥 Download Image
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

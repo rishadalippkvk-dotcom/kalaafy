@@ -1,74 +1,82 @@
 [
   {
-    "id": "1",
-    "url": "http://localhost:5000/uploads/1765687506012-742302568.jpg",
-    "title": "Classical Dance Performance",
-    "category": "onstage",
-    "event": "Classical Dance",
-    "description": "Beautiful classical dance performance"
-  },
-  {
-    "id": 2,
-    "url": "/gallery/singing1.jpg",
-    "title": "Solo Singing Champion",
-    "category": "onstage",
-    "event": "Solo Singing",
-    "description": "Winner of solo singing competition"
-  },
-  {
-    "id": 3,
-    "url": "/gallery/drama1.jpg",
-    "title": "Drama Performance",
-    "category": "onstage",
-    "event": "Drama",
-    "description": "Intense drama performance"
-  },
-  {
-    "id": 4,
-    "url": "/gallery/debate1.jpg",
-    "title": "Debate Competition",
+    "id": 1765794583655,
+    "title": " ",
     "category": "offstage",
-    "event": "Debate",
-    "description": "Heated debate session"
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794583615-762314990.jpeg"
   },
   {
-    "id": 5,
-    "url": "/gallery/quiz1.jpg",
-    "title": "Quiz Competition",
+    "id": 1765794653397,
+    "title": " ",
     "category": "offstage",
-    "event": "Quiz",
-    "description": "Intense quiz rounds"
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794653380-56051610.jpeg"
   },
   {
-    "id": 6,
-    "url": "/gallery/western1.jpg",
-    "title": "Western Dance Group",
-    "category": "onstage",
-    "event": "Western Dance",
-    "description": "Energetic western dance performance"
-  },
-  {
-    "id": 7,
-    "url": "/gallery/comedy1.jpg",
-    "title": "Stand-up Comedy",
-    "category": "onstage",
-    "event": "Comedy",
-    "description": "Hilarious comedy performance"
-  },
-  {
-    "id": 8,
-    "url": "/gallery/photo1.jpg",
-    "title": "Photography Exhibition",
+    "id": 1765794720297,
+    "title": " ",
     "category": "offstage",
-    "event": "Photography",
-    "description": "Award-winning photographs"
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794720290-935337489.jpeg"
   },
   {
-    "id": 1765687564707,
-    "url": "/gallery/test_upload.jpg",
-    "title": "Test via Upload Form",
+    "id": 1765794757243,
+    "title": " ",
     "category": "offstage",
-    "event": "Upload Test",
-    "description": "Testing file upload form submission."
+    "event": "   ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794757229-762845430.jpeg"
+  },
+  {
+    "id": 1765794786053,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794786043-599030698.jpeg"
+  },
+  {
+    "id": 1765794829793,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794829787-433616424.jpeg"
+  },
+  {
+    "id": 1765794871978,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794871941-754645731.jpeg"
+  },
+  {
+    "id": 1765794921457,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794921450-629565127.jpeg"
+  },
+  {
+    "id": 1765794937863,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794937829-741234406.jpeg"
+  },
+  {
+    "id": 1765794980922,
+    "title": " ",
+    "category": "offstage",
+    "event": " ",
+    "description": " ",
+    "url": "http://localhost:5000/uploads/1765794980916-884559035.jpeg"
   }
 ]

@@ -6,9 +6,14 @@ const path = require('path');
 const multer = require('multer');
 
 // Configure Multer Storage
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR);
+}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -19,9 +24,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const app = express();
-const PORT = 5000;
+// Use Render's PORT environment variable or default to 5000
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Configure CORS to allow requests from the frontend
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003'],
+    credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -49,15 +59,32 @@ const writeData = (file, data) => {
 };
 
 // Login Endpoint
-app.post('/api/login', (req, res) => {
+app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const admins = readData(ADMINS_FILE);
+    // Debug logging
+    console.log('Login attempt:', {
+        receivedUsername: username,
+        receivedPassword: password,
+        adminsFound: admins.length
+    });
+
     const admin = admins.find(a => a.username === username && a.password === password);
+    console.log('Admin found:', !!admin);
 
     if (admin) {
         res.json({ success: true, token: 'admin-token-123' });
     } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        res.status(401).json({
+            success: false,
+            message: 'Invalid credentials',
+            debug: {
+                receivedUsername: username,
+                receivedPassword: password,
+                adminsCount: admins.length,
+                adminFile: ADMINS_FILE
+            }
+        });
     }
 });
 
@@ -179,12 +206,20 @@ app.get('/api/gallery', (req, res) => {
 });
 
 app.post('/api/gallery', upload.single('image'), (req, res) => {
+    console.log("Received request:", req.body);
+
     const images = readData(GALLERY_FILE);
+
 
     let imageUrl = req.body.url;
     if (req.file) {
-        imageUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+        console.log("File uploaded:", req.file);
+        // Updated to work with Render's dynamic URL
+        const host = req.get('host');
+        imageUrl = `${req.protocol}://${host}/uploads/${req.file.filename}`;
     }
+
+    console.log("Image URL:", imageUrl);
 
     const newImage = {
         id: Date.now(),
@@ -205,7 +240,9 @@ app.put('/api/gallery/:id', upload.single('image'), (req, res) => {
     if (index !== -1) {
         let imageUrl = req.body.url || images[index].url;
         if (req.file) {
-            imageUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+            // Updated to work with Render's dynamic URL
+            const host = req.get('host');
+            imageUrl = `${req.protocol}://${host}/uploads/${req.file.filename}`;
         }
 
         images[index] = {
@@ -229,6 +266,7 @@ app.delete('/api/gallery/:id', (req, res) => {
     res.json({ success: true });
 });
 
+// Updated to use the PORT variable for Render deployment
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -110,7 +110,21 @@ const AdminDashboard = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => {
+            const newData = { ...prev, [name]: value };
+
+            // Auto-select Group based on Department
+            if (name === 'department') {
+                const astraDepts = ['1 Year Economics', '2 Year Economics', '3 Year Economics', '1 Year BBA'];
+                const lokhaDepts = ['1 Year GDA', '2 Year GDA', '3 Year GDA', '1 Year BCA', '1 Year B.Com Finance'];
+                const eakhaDepts = ['1 Year B.Com Co-operation', '2 Year B.Com Co-operation', '3 Year B.Com Co-operation'];
+
+                if (astraDepts.includes(value)) newData.college = 'ASTRA';
+                else if (lokhaDepts.includes(value)) newData.college = 'LOKHA';
+                else if (eakhaDepts.includes(value)) newData.college = 'EAKHA';
+            }
+            return newData;
+        });
     };
 
     const handleFileChange = (e) => {
@@ -124,16 +138,16 @@ const AdminDashboard = () => {
     const renderProgramInputs = () => (
         <>
             <input name="title" placeholder="Title (e.g., Classical Dance)" value={formData.title || ''} onChange={handleInputChange} required />
-            <input name="description" placeholder="Description" value={formData.description || ''} onChange={handleInputChange} required />
+            <input name="description" placeholder="Description" value={formData.description || ''} onChange={handleInputChange} />
             <select name="category" value={formData.category || ''} onChange={handleInputChange} required>
                 <option value="">Select Category</option>
                 <option value="onstage">Onstage</option>
                 <option value="offstage">Offstage</option>
             </select>
             <input name="time" placeholder="Time (e.g., 10:00 AM)" value={formData.time || ''} onChange={handleInputChange} required />
-            <input name="venue" placeholder="Venue" value={formData.venue || ''} onChange={handleInputChange} required />
+            <input name="venue" placeholder="Venue" value={formData.venue || ''} onChange={handleInputChange} />
             <input name="date" type="date" value={formData.date || ''} onChange={handleInputChange} required />
-            <input name="icon" placeholder="Icon (Emoji e.g., 💃)" value={formData.icon || ''} onChange={handleInputChange} />
+            <input name="icon" placeholder="Icon" value={formData.icon || ''} onChange={handleInputChange} />
             <input name="participants" placeholder="Participants info" value={formData.participants || ''} onChange={handleInputChange} />
         </>
     );
@@ -168,10 +182,35 @@ const AdminDashboard = () => {
                 <option value="offstage">Offstage</option>
             </select>
             <input name="program" placeholder="Program Name" value={formData.program || ''} onChange={handleInputChange} required />
+            <div style={{ display: 'flex', gap: '10px' }}>
+                <input name="chestNumber" placeholder="Chest No" value={formData.chestNumber || ''} onChange={handleInputChange} style={{ flex: 1 }} />
+                <select name="department" value={formData.department || ''} onChange={handleInputChange} style={{ flex: 1 }} >
+                    <option value="">Select Department</option>
+                    <option value="1 Year Economics">1 Year Economics</option>
+                    <option value="2 Year Economics">2 Year Economics</option>
+                    <option value="3 Year Economics">3 Year Economics</option>
+                    <option value="1 Year BBA">1 Year BBA</option>
+                    <option value="1 Year GDA">1 Year GDA</option>
+                    <option value="2 Year GDA">2 Year GDA</option>
+                    <option value="3 Year GDA">3 Year GDA</option>
+                    <option value="1 Year BCA">1 Year BCA</option>
+                    <option value="1 Year B.Com Finance">1 Year B.Com Finance</option>
+                    <option value="1 Year B.Com Co-operation">1 Year B.Com Co-operation</option>
+                    <option value="2 Year B.Com Co-operation">2 Year B.Com Co-operation</option>
+                    <option value="3 Year B.Com Co-operation">3 Year B.Com Co-operation</option>
+                </select>
+            </div>
             <input name="rank" type="number" placeholder="Rank (1, 2, 3)" value={formData.rank || ''} onChange={handleInputChange} required />
             <input name="score" type="number" placeholder="Score" value={formData.score || ''} onChange={handleInputChange} required />
-            <input name="college" placeholder="College Name" value={formData.college || ''} onChange={handleInputChange} required />
-            <input name="medal" placeholder="Medal (🥇, 🥈, 🥉)" value={formData.medal || ''} onChange={handleInputChange} />
+
+            {/* Group/College Selection */}
+            <select name="college" value={formData.college || ''} onChange={handleInputChange} required>
+                <option value="">Select Group (House)</option>
+                <option value="ASTRA">ASTRA</option>
+                <option value="LOKHA">LOKHA</option>
+                <option value="EAKHA">EAKHA</option>
+            </select>
+
             <select name="grade" value={formData.grade || ''} onChange={handleInputChange}>
                 <option value="">Select Grade</option>
                 <option value="A">A</option>
@@ -264,7 +303,7 @@ const AdminDashboard = () => {
                                 <div className="card-body">
                                     {activeTab === 'programs' && (
                                         <>
-                                            <h4>{item.icon} {item.title}</h4>
+                                            <h4>{item.title}</h4>
                                             <p>{item.description}</p>
                                             <small>{item.date} | {item.time}</small>
                                         </>
@@ -278,9 +317,10 @@ const AdminDashboard = () => {
                                     )}
                                     {activeTab === 'scoreboard' && (
                                         <>
-                                            <h4>{item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉'} {item.type === 'individual' ? item.name : (item.teamName || item.groupName)}</h4>
+                                            <h4>{item.type === 'individual' ? item.name : (item.teamName || item.groupName)}</h4>
                                             <p>{item.program}</p>
                                             <small>{item.college} | Score: {item.score} | Grade: {item.grade}</small>
+                                            <small className="rank-badge">Rank: {item.rank}</small>
                                         </>
                                     )}
                                     {activeTab === 'gallery' && (
@@ -304,7 +344,7 @@ const AdminDashboard = () => {
             <style>{`
                 .admin-dashboard-container {
                     padding: 20px;
-                    background: #f4f6f8;
+                    background: linear-gradient(135deg, #fffdf2 0%, #ffe082 100%);
                     min-height: 100vh;
                 }
                 .dashboard-header {

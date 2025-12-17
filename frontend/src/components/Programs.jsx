@@ -32,13 +32,13 @@ const Programs = () => {
                         className={`tab ${activeCategory === 'offstage' ? 'active' : ''}`}
                         onClick={() => setActiveCategory('offstage')}
                     >
-                        🎯 Offstage
+                        Offstage
                     </button>
                     <button
                         className={`tab ${activeCategory === 'onstage' ? 'active' : ''}`}
                         onClick={() => setActiveCategory('onstage')}
                     >
-                        🎭 Onstage
+                        Onstage
                     </button>
                 </div>
 
@@ -55,19 +55,19 @@ const Programs = () => {
 
                             <div className="program-details">
                                 <div className="detail-item">
-                                    <span className="detail-label">📅 Date:</span>
+                                    <span className="detail-label"> Date:</span>
                                     <span className="detail-value">{new Date(program.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">⏰ Time:</span>
+                                    <span className="detail-label"> Time:</span>
                                     <span className="detail-value">{program.time}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">📍 Venue:</span>
+                                    <span className="detail-label"> Venue:</span>
                                     <span className="detail-value">{program.venue}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">👥 Type:</span>
+                                    <span className="detail-label"> Type:</span>
                                     <span className="detail-value">{program.participants}</span>
                                 </div>
                             </div>
