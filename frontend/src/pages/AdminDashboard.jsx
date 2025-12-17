@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import '../components/Navigation.css';
 
 const AdminDashboard = () => {
@@ -21,7 +22,7 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/${activeTab}`);
+            const res = await fetch(`${API_BASE_URL}/api/${activeTab}`);
             const data = await res.json();
             setItems(data);
         } catch (error) {
@@ -41,7 +42,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure?")) return;
         try {
-            await fetch(`http://localhost:5000/api/${activeTab}/${id}`, { method: 'DELETE' });
+            await fetch(`${API_BASE_URL}/api/${activeTab}/${id}`, { method: 'DELETE' });
             fetchData();
         } catch (error) {
             console.error("Error deleting:", error);
@@ -60,8 +61,8 @@ const AdminDashboard = () => {
         e.preventDefault();
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing
-            ? `http://localhost:5000/api/${activeTab}/${editId}`
-            : `http://localhost:5000/api/${activeTab}`;
+            ? `${API_BASE_URL}/api/${activeTab}/${editId}`
+            : `${API_BASE_URL}/api/${activeTab}`;
 
         try {
             if (activeTab === 'gallery') {

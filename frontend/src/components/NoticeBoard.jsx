@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import './NoticeBoard.css';
 
 const NoticeBoard = () => {
@@ -6,7 +7,7 @@ const NoticeBoard = () => {
     const [notices, setNotices] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/notices')
+        fetch(`${API_BASE_URL}/api/notices`)
             .then(res => res.json())
             .then(data => setNotices(data))
             .catch(err => console.error("Error fetching notices:", err));

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { galleryImages as mockGalleryImages } from '../data/mockData';
+import { API_BASE_URL } from '../config';
 import './Gallery.css';
 
 const Gallery = () => {
@@ -8,7 +9,7 @@ const Gallery = () => {
     const [galleryImages, setGalleryImages] = useState(mockGalleryImages);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/gallery')
+        fetch(`${API_BASE_URL}/api/gallery`)
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) {
@@ -50,24 +51,24 @@ const Gallery = () => {
             // Fetch the image as a blob
             const response = await fetch(imageUrl);
             const blob = await response.blob();
-            
+
             // Create a blob URL
             const blobUrl = URL.createObjectURL(blob);
-            
+
             // Create a temporary link element
             const link = document.createElement('a');
             link.href = blobUrl;
             link.download = imageName || 'kalaafy-image.jpg';
-            
+
             // Append to the body
             document.body.appendChild(link);
-            
+
             // Trigger the download
             link.click();
-            
+
             // Remove the link from the document
             document.body.removeChild(link);
-            
+
             // Release the blob URL
             URL.revokeObjectURL(blobUrl);
         } catch (error) {

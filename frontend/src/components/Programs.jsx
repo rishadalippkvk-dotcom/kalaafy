@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import './Programs.css';
 
 const Programs = () => {
@@ -6,7 +7,7 @@ const Programs = () => {
     const [programs, setPrograms] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/programs')
+        fetch(`${API_BASE_URL}/api/programs`)
             .then(res => res.json())
             .then(data => setPrograms(data))
             .catch(err => console.error("Error fetching programs:", err));

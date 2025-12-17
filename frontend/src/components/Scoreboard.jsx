@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { API_BASE_URL } from '../config';
 import './Scoreboard.css';
 
 const Scoreboard = () => {
@@ -8,7 +9,7 @@ const Scoreboard = () => {
     const [activeTab, setActiveTab] = useState('overall'); // 'overall', 'individual', 'group'
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/scoreboard')
+        fetch(`${API_BASE_URL}/api/scoreboard`)
             .then(res => res.json())
             .then(data => {
                 setScores(data);
